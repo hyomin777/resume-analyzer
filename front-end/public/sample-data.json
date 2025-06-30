@@ -1,0 +1,172 @@
+{
+  "essential": {
+    "skillAnalysisResults": [
+      {
+        "skill": "게임 시스템 및 메커니즘 설계",
+        "rating": 5,
+        "evaluation": "5년 이상의 모바일 및 PC 게임 개발 경험을 통해 게임 기획서 작성, 레벨 디자인, 시스템 밸런싱 등의 역량을 입증함. Eternal Dawn 프로젝트에서 캐릭터 및 스킬 기획, 퀘스트 구조화 등을 성공적으로 수행한 경험이 있음.",
+        "category": "하드 스킬",
+        "subcategory": "게임 디자인"
+      },
+      {
+        "skill": "게임 엔진 활용 능력",
+        "rating": 4,
+        "evaluation": "Unity, Unreal Engine 4/5 등 주요 게임 엔진 사용 경험 보유. 실제 프로젝트에서 활용한 경험이 있으며, 관련 도구들을 통한 프로토타이핑 능력 보유.",
+        "category": "하드 스킬",
+        "subcategory": "기술역량"
+      },
+      {
+        "skill": "밸런스 설계 및 조정",
+        "rating": 5,
+        "evaluation": "DAU 15% 가, ARPPU 10% 상승 등의 성과를 통해 입증된 밸런스 조정 능력. A/B 테스트 설계 및 데이터 분석을 통한 개선 경험 보유.",
+        "category": "하드 스킬",
+        "subcategory": "게임 밸런싱"
+      },
+      {
+        "skill": "3년 이상 경력",
+        "rating": 5,
+        "evaluation": "XYZ Games와 ABC Interactive에서 5년 이상의 실무 경험 보유. 요구되는 3년 이상의 경력 조건을 충분히 충족함.",
+        "category": "경력",
+        "subcategory": "업무경험"
+      },
+      {
+        "skill": "의사소통 및 협업 능력",
+        "rating": 4,
+        "evaluation": "크로스펑션 팀과의 협업 경험과 스크럼 미팅 주도 경험을 통해 입증된 커뮤니케이션 능력. Agile/Scrum 기반 프로젝트 관리 경험 보유.",
+        "category": "소프트 스킬",
+        "subcategory": "커뮤니케이션"
+      }
+    ]
+  },
+  "preferred": {
+    "skillAnalysisResults": [
+      {
+        "skill": "스토리텔링 및 세계관 구축",
+        "rating": 4,
+        "evaluation": "Legends of Gaia 프로젝트에서 스토리라인 개발 및 퀘스트 구조화 경험 보유. 메인/서브 퀘스트 설계를 통한 세계관 구축 경험 있음.",
+        "category": "하드 스킬",
+        "subcategory": "콘텐츠 기획"
+      },
+      {
+        "skill": "데이터 분석 활용 능력",
+        "rating": 4,
+        "evaluation": "KPI 분석, A/B 테스트 설계, 데이터 기반 밸런스 조정 등의 경험 보유. 실제 프로젝트에서 데이터 분석을 통한 개선 성과 달성.",
+        "category": "하드 스킬",
+        "subcategory": "분석력"
+      },
+      {
+        "skill": "신기술(AI) 활용 경험",
+        "rating": 3,
+        "evaluation": "VR/AR 게임 디자인 및 메타버스 관련 프로젝트 연구 중이나, AI 기술 활용 경험은 명시되어 있지 않음.",
+        "category": "하드 스킬",
+        "subcategory": "기술역량"
+      },
+      {
+        "skill": "프로토타이핑과 피드백 반영",
+        "rating": 4,
+        "evaluation": "이용자 피드백 반영을 통한 빠른 개선 사례 있음(튜토리얼 클리어율 20% 개선). 정기 패치를 통한 지속적인 개선 경험 보유.",
+        "category": "하드 스킬",
+        "subcategory": "개발역량"
+      },
+      {
+        "skill": "PVE 게임 개발 경험",
+        "rating": 3,
+        "evaluation": "PVE 게임 개발 경험이 명시적으로 드러나지 않으나, 다양한 장르의 게임 개발 경험 보유.",
+        "category": "하드 스킬",
+        "subcategory": "게임개발"
+      }
+    ]
+  },
+  "matchingSkills": [],
+  "missingSkills": [],
+  "similarityScores": [],
+  "trendData": [],
+  "overallEvaluation": {
+    "resume_feedback": [
+      {
+        "category": "성과 중심 기술",
+        "feedback": [
+          "각 프로젝트명과 정량적 지표를 명확히 연결하여 핵심 성과를 한눈에 파악할 수 있도록 기술합니다.",
+          "예를 들어 'Eternal Dawn 프로젝트'에서 DAU 15% 증가, 매출 20% 성장과 같이 구체적 수치를 제시합니다."
+        ]
+      },
+      {
+        "category": "기술 스택 및 협업 경험",
+        "feedback": [
+          "협업 도구(Jira, Confluence, Slack)나 커뮤니케이션 방식 등 엔지니어링 팀과의 협업 과정을 구체적으로 설명하여 협업 능력을 강조합니다.",
+          "데이터 분석 도구(예: Google Analytics, Tableau) 및 Agile/Scrum 등의 프로젝트 관리 방법을 실제 업무 흐름과 함께 제시하여 실무 경험을 입증합니다."
+        ]
+      },
+      {
+        "category": "프로젝트 역할 및 책임",
+        "feedback": [
+          "각 프로젝트별로 본인의 역할과 책임 범위를 구조적으로 정리하고, 프로젝트 규모(예산, 팀 구성, 기간)와 달성한 KPI를 명확히 밝힙니다.",
+          "기획/분석 도구 활용 사례나 프로젝트를 통해 습득한 전문성을 구체적으로 제시하여 자신의 기여도를 강조합니다."
+        ]
+      }
+    ],
+    "cover_letter_feedback": [
+      {
+        "category": "지원 동기 및 비전 연계",
+        "feedback": [
+          "회사의 글로벌 시장 진출, 메타버스 플랫폼 확대 등 비전과 본인의 글로벌 프로젝트 경험을 연계하여 미래 성장 가능성을 강조합니다.",
+          "Web 3.0, AI 기반 게임 서비스 등 산업 트렌드를 분석하고 본인의 신기술 도입 성과를 근거로 회사 비전에 부합하는 지원 동기를 제시합니다."
+        ]
+      },
+      {
+        "category": "문제 해결 스토리텔링",
+        "feedback": [
+          "STAR 기법을 활용해 문제 상황(유저 이탈 증가), 목표(리텐션 개선), 실행(데이터 분석 및 A/B 테스트), 결과(리텐션 50% 개선) 순으로 명확히 서술합니다.",
+          "이 과정을 통해 논리적 문제 해결 능력과 기여도를 한눈에 파악할 수 있도록 스토리를 전개합니다."
+        ]
+      }
+    ],
+    "feedback": [
+      "전반적 평가: 지원자는 게임 디자이너로서 요구되는 대부분의 필수 요건과 우대사항을 충족하고 있습니다. 특히 5년 이상의 실무 경험과 다양한 프로젝트 참여 경험은 큰 강점입니다."
+    ],
+    "improvement_suggestions_for_applicant": [
+      "해당 직무는 게임 디자인의 핵심 역량을 중심으로 구성되어 있으며, 지원자의 경력에 매우 잘 부합합니다."
+    ],
+    "recommendations": [
+      "AI 기술 관련 역량 강화: 현재 연구 중인 VR/AR, 메타버스 외에도 AI 기술을 게임에 적용하는 방법에 대한 학습과 실험이 필요합니다."
+    ]
+  },
+  "analysis": {
+    "job_title": {
+      "score": 4,
+      "comments": { "applicant_perspective": "직무명이 명확하고 일반적인 게임 업계 표준을 따르고 있어 이해하기 쉽습니다." }
+    },
+    "job_summary": {
+      "score": 4,
+      "comments": { "applicant_perspective": "주요 업무가 구체적으로 나열되어 있어 업무 범위와 책임을 명확히 파악할 수 있습니다." }
+    },
+    "responsibilities": {
+      "score": 4,
+      "comments": { "applicant_perspective": "핵심 책임 사항이 구체적으로 제시되어 있어 지원자가 자신의 경험과 연관 지어 평가할 수 있습니다." }
+    },
+    "required_qualifications": {
+      "score": 5,
+      "comments": { "applicant_perspective": "필수 자격 요건이 명확하게 제시되어 있어 지원 자격 충족 여부를 쉽게 판단할 수 있습니다." }
+    },
+    "preferred_qualifications": {
+      "score": 4,
+      "comments": { "applicant_perspective": "우대사항이 구체적이고 현재 게임 업계 트렌드를 반영하고 있어 준비해야 할 부분을 파악하기 쉽습니다." }
+    },
+    "hard_skills": {
+      "score": 5,
+      "comments": { "applicant_perspective": "요구되는 기술적 역량이 명확히 제시되어 있신의 기술력을 효과적으로 어필할 수 있습니다." }
+    },
+    "soft_skills": {
+      "score": 4,
+      "comments": { "applicant_perspective": "의사소통 및 협업 능력과 같은 소프트 스킬의 중요성이 잘 드러나 있습니다." }
+    },
+    "experience": {
+      "score": 5,
+      "comments": { "applicant_perspective": "요구되는 경력 사항이 구체적이며, 관련 분야 경험에 대한 설명이 명확합니다." }
+    },
+    "improvementSuggestions": [
+      "해당 직무는 게임 디자인의 핵심 역량을 중심으로 구성되어 있으며, 지원자의 경력에 매우 잘 부합합니다.",
+      "JD에서 강조하는 창의적이고 논리적인 사고 능력을 입증할 수 있는 구체적인 사례를 준비하시기를 권장합니다."
+    ]
+  }
+}

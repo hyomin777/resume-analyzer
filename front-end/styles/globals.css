@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #374151;
+  --accent: #4f46e5;
+  --bg: #f8fafc;
+}
+body {
+  background-color: var(--bg);
+}
+.blueprint {
+  background-color: #e8f2ff;
+  background-image:
+    linear-gradient(90deg, rgba(79, 70, 229, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(79, 70, 229, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.technical-drawing {
+  border: 1px solid var(--accent);
+  background-color: white;
+}
+.metric-box {
+  border: 2px solid var(--accent);
+  border-radius: 1rem;
+}
+.blueprint-line {
+  position: relative;
+  padding-left: 20px;
+}
+.blueprint-line::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 12px;
+  height: 2px;
+  background-color: var(--accent);
+}
+.annotation {
+  font-family: monospace;
+  color: var(--accent);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.measurement {
+  color: var(--accent);
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+.question-tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background-color: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+  display: inline-block;
+}
