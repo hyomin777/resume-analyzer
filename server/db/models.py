@@ -1,11 +1,19 @@
-from sqlalchemy import Table, Column, Integer, String, MetaData
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import declarative_base
 
-metadata = MetaData()
+Base = declarative_base()
 
-TEST_TABLE = Table(
-    "test",
-    metadata,
-    Column("id", Integer, primary_key=True),
-    Column("user_id", Integer),
-    Column("content", String)
-)
+
+class Test(Base):
+    __tablename__ = "test"
+
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(String)
+    
+
+class Resume(Base):
+    __tablename__ = "resume"
+
+    id = Column(Integer, primary_key=True, index=True)
+    resume_content = Column(String)
+    text = Column(String)

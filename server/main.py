@@ -5,34 +5,32 @@ logger = logging.getLogger(__name__)
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from sqlalchemy.ext.asyncio import create_async_engine
-
-from db.models import metadata
-from db.database import get_database
-from config import Config
+from db.database import engine
+from db.models import Base
 
 @asynccontextmanager
-async def lifespan(app):
+async def lifespan(app: FastAPI):
     logger.info("Creating tables...")
-    engine = create_async_engine(Config.DATABASE_URL, echo=True)
     async with engine.begin() as conn:
-        await conn.run_sync(metadata.create_all)
-
-    logger.info("Connecting DB...")
-    db = get_database()
-    await db.connect()
+        await conn.run_sync(Base.metadata.create_all)
 
     yield
 
     logger.info("Dropping tables...")
     async with engine.begin() as conn:
-            await conn.run_sync(metadata.drop_all)
-
-    logger.info("Disconnecting DB...")
-    await db.disconnect()
+        await conn.run_sync(Base.metadata.drop_all)
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
     uvicorn.run(
