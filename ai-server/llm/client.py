@@ -1,5 +1,5 @@
 from openai import OpenAI
-from llm.prompt import OutputModel
+from llm.prompt import OutputModel, create_system_prompt
 from config import Config
 
 LLM_CLIENT = OpenAI(api_key=Config.OPENAI_API_KEY)
@@ -13,14 +13,15 @@ async def get_llm_response(prompt):
         input=[
             {
                 "role": "system",
-                "content": "You are an HR expert. All answers must be in Korean and output only valid JSON as specified."
+                "content": create_system_prompt()
             },
             {
                 "role": "user",
                 "content": prompt
             },
         ],
-        temperature=0.1,
+        temperature=0.0,
+        max_output_tokens=2048,
         text_format=OutputModel
     )
 

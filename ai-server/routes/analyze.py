@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from llm.client import get_llm_response
-from llm.prompt import create_prompt
+from llm.prompt import create_user_prompt
 
 router = APIRouter()
 
@@ -11,6 +11,6 @@ class ResumeInput(BaseModel):
 
 @router.post("/analyze-resume")
 async def upload_resume(payload: ResumeInput):
-    prompt = create_prompt(payload.resume_content, payload.text)
+    prompt = create_user_prompt(payload.resume_content, payload.text)
     result = await get_llm_response(prompt)
     return {"result": result}
