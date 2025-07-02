@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, RadialLinearScale, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Tooltip, Legend } from "chart.js";
 import { SkillBlock } from "@/components/SkillBlock";
-import { JDAnalysisSection } from "@/components/JDAnalysisSection";
 
 ChartJS.register(RadialLinearScale, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Filler, Tooltip, Legend);
 
@@ -144,9 +143,6 @@ export default function ReportPage() {
           </div>
         </div>
       </div>
-
-      {/* JD 분석 */}
-      <JDAnalysisSection jdAnalysis={data.analysis} />
     </main>
   );
 }

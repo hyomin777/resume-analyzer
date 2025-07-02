@@ -1,4 +1,3 @@
-// components/AnalysisReport.tsx
 import React, { useState } from 'react';
 import { Bar, Radar, Line } from 'react-chartjs-2';
 import {
@@ -126,32 +125,6 @@ export default function AnalysisReport({ data }: AnalysisReportProps) {
             </span>
           </div>
         </div>
-      </div>
-
-      {/* PDF 버튼 */}
-      <div className="flex justify-end mb-8">
-        <button
-          className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow font-bold"
-          onClick={() => {
-            if (typeof window === 'undefined') return;
-            const element = document.getElementById('report-container');
-            if (!element) return;
-            import('html2pdf.js').then((module) => {
-              const html2pdf = module.default;
-              html2pdf()
-                .from(element)
-                .set({
-                  margin: 10,
-                  filename: 'Candidate_Report.pdf',
-                  html2canvas: { scale: 2 },
-                  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                })
-                .save();
-            });
-          }}
-        >
-          PDF 다운로드
-        </button>
       </div>
 
       {/* 실제 리포트 컨테이너 */}

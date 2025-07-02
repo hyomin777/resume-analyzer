@@ -17,7 +17,7 @@ export default function Home() {
     form.append("text", jd);
 
     const res = await fetch(
-      "http://localhost:8000/upload-resume",
+      "/api/upload-resume",
       { method: "POST", body: form }
     );
     const data = await res.json();

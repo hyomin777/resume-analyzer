@@ -7,7 +7,7 @@ from config import Config
 
 router = APIRouter()
 
-@router.post("/upload-resume")
+@router.post("/api/upload-resume")
 async def upload_resume(
     file: UploadFile = File(...), 
     text: str = Form(...),
@@ -18,7 +18,7 @@ async def upload_resume(
 
     async with httpx.AsyncClient() as client:
         response = await client.post(
-            url=Config.AI_SERVER_URL + "/analyze-resume",
+            url=Config.AI_SERVER_URL + "/api/analyze-resume",
             json={"resume_content": resume_content, "text": text},
             timeout=120
         )

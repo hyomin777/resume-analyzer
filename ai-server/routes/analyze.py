@@ -9,7 +9,7 @@ class ResumeInput(BaseModel):
     resume_content: str
     text: str
 
-@router.post("/analyze-resume")
+@router.post("/api/analyze-resume")
 async def upload_resume(payload: ResumeInput):
     prompt = create_user_prompt(payload.resume_content, payload.text)
     result = await get_llm_response(prompt)
