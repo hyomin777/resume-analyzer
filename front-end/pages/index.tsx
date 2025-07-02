@@ -13,12 +13,16 @@ export default function Home() {
     setLoading(true);
 
     const form = new FormData();
-    form.append("resume", resume);
-    form.append("jd", jd);
+    form.append("file", resume);
+    form.append("text", jd);
 
-    const res = await fetch("/api/analyze", { method: "POST", body: form });
+    const res = await fetch(
+      "http://localhost:8000/upload-resume",
+      { method: "POST", body: form }
+    );
     const data = await res.json();
-    setResult(data);
+    
+    setResult(data.result.result);
     setLoading(false);
   };
 
