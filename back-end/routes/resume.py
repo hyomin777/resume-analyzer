@@ -3,7 +3,7 @@ from fastapi import APIRouter, UploadFile, Depends, Header, File, Form
 from fastapi.exceptions import HTTPException
 from db import Repository, get_resume_repository
 from db.models import Resume
-from utils import extract_text_from_pdf, verify_access_token, get_current_user_id
+from utils import extract_text_from_pdf, get_current_user_id
 from config import Config
 
 resume_router = APIRouter()

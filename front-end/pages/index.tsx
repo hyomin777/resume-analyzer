@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AnalysisReport from "../components/AnalysisReport";
 import LoginForm from "../components/LoginForm";
+import LogoutButton from "../components/LogoutButton";
 import SignupForm from "../components/SignupForm";
 
 export default function Home() {
@@ -79,6 +80,11 @@ export default function Home() {
           placeholder="채용공고, JD를 입력하세요" required />
         <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded">AI 분석 시작</button>
       </form>
+
+      <div className="text-right my-6">
+        <LogoutButton onLogout={() => setLoggedIn(false)} />
+      </div>
+      
       {loading && <div className="text-center">분석 중...</div>}
       {result && <AnalysisReport data={result} />}
     </main>
