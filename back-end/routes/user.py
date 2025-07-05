@@ -9,14 +9,14 @@ from utils import (
 
 user_router = APIRouter()
 
-@user_router.post("/api/user")
+@user_router.post("/user")
 async def create_user(
     username: str = Body(...),
     password: str = Body(...),
     password_check: str = Body(...),
     repository: UserRepository = Depends(get_user_repository)
 ):
-    user = await repository.get_user_by_username("hyomin")
+    user = await repository.get_user_by_username(username)
     if user:
         raise HTTPException(status_code=400, detail=f"Username: {username} already exists")
     
@@ -31,7 +31,7 @@ async def create_user(
     return {"result": user.id}
 
 
-@user_router.post("/api/login")
+@user_router.post("/login")
 async def login(
     username: str = Body(...),
     password: str = Body(...),
@@ -51,7 +51,7 @@ async def login(
     return {"access_token": token, "token_type": "bearer"}
     
 
-@user_router.get("/api/me")
+@user_router.get("/me")
 async def get_current_user(
     authorization: str = Header(...),
     repository: UserRepository = Depends(get_user_repository)

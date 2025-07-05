@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from db.database import engine
 from db.models import Base
-from routes.resume import router
+from routes import router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 import fitz
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from fastapi import Header
+from fastapi.exceptions import HTTPException
 from config import Config
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -36,3 +38,10 @@ def verify_access_token(token: str) -> dict:
         return payload
     except JWTError:
         return None
+    
+def get_current_user_id(authorization: str = Header(...)):
+    token = authorization.replace("Bearer ", "")
+    payload = verify_access_token(token)
+    if payload is None:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return payload["sub"]
