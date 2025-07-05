@@ -5,14 +5,18 @@ from db.models import Resume
 from utils import extract_text_from_pdf
 from config import Config
 
-router = APIRouter()
+resume_router = APIRouter()
 
-@router.post("/api/upload-resume")
+@resume_router.post("/api/upload-resume")
 async def upload_resume(
+    user_id: int = Form(...),
     file: UploadFile = File(...), 
     text: str = Form(...),
     repository: Repository = Depends(get_resume_repository),
 ):
+    if not file.filename.lower().endswith(".pdf"):
+        return {"error": "Only PDF files are supported."}
+    
     content = await file.read()
     resume_content = extract_text_from_pdf(content)
 
@@ -22,9 +26,13 @@ async def upload_resume(
             json={"resume_content": resume_content, "text": text},
             timeout=120
         )
+        if response.status_code != 200:
+            return {"error": "AI server analyze resume failed",}
+
         result = response.json()
 
     resume = Resume(
+        user_id=user_id,
         resume_content=resume_content,
         text=text
     )
