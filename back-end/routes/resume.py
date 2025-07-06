@@ -42,6 +42,7 @@ async def upload_resume(
     await repository.add_item(resume)
     return {"result": result}
 
+
 @resume_router.post("/save-result")
 async def save_result(
     authorization: str = Header(...),
@@ -54,3 +55,12 @@ async def save_result(
     )
     result = await repository.add_item(result)
     return {"result": result}
+
+
+@resume_router.get("/results")
+async def get_results(
+    authorization: str = Header(...),
+    repository: Repository = Depends(get_result_repository)
+):
+    results = await repository.get_all_by_user_id(int(get_current_user_id(authorization)))
+    return {"result": [{"id": r.id, "user_id": r.user_id, "result": r.result} for r in results]}

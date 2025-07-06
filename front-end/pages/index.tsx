@@ -3,6 +3,7 @@ import AnalysisReport from "../components/AnalysisReport";
 import LoginForm from "../components/LoginForm";
 import LogoutButton from "../components/LogoutButton";
 import SignupForm from "../components/SignupForm";
+import SavedResultsList from "../components/SavedResultsList";
 
 export default function Home() {
   const [resume, setResume] = useState<File | null>(null);
@@ -106,6 +107,8 @@ export default function Home() {
       <div className="text-right my-6">
         <LogoutButton onLogout={() => setLoggedIn(false)} />
       </div>
+
+      <SavedResultsList />
 
       <h1 className="text-2xl font-bold mb-6">AI 이력서 역량 분석</h1>
       
