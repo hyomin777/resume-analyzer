@@ -1,11 +1,12 @@
-import '../styles/globals.css';
-import AnalysisLayout from '../layouts/AnalysisLayout';
-import { AppProps } from 'next/app';
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import NavBar from "../layouts/NavBar";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <AnalysisLayout>
+    <>
+      <NavBar />
       <Component {...pageProps} />
-    </AnalysisLayout>
+    </>
   );
 }
