@@ -41,9 +41,9 @@ type TrendSkill = { skill: string; history: TrendHistory[] };
 type FeedbackItem = { category: string; feedback: string[] };
 
 interface AnalysisReportProps {
-  data: {
-    essential: { skillAnalysisResults: SkillResult[] };
-    preferred: { skillAnalysisResults: SkillResult[] };
+  data?: {
+    essential?: { skillAnalysisResults?: SkillResult[] };
+    preferred?: { skillAnalysisResults?: SkillResult[] };
     matchingSkills?: MatchSkill[];
     missingSkills?: MatchSkill[];
     similarityScores?: SimilaritySkill[];
@@ -55,9 +55,16 @@ interface AnalysisReportProps {
   };
 }
 
-export default function AnalysisReport({ data }: AnalysisReportProps) {
-  const resumeFeedback: FeedbackItem[] = data.overallEvaluation?.resume_feedback ?? [];
-  const coverFeedback: FeedbackItem[] = data.overallEvaluation?.cover_letter_feedback ?? [];
+export default function AnalysisReport({ data = {} }: AnalysisReportProps) {
+  // 방어적 기본값
+  const essential: SkillResult[] = data?.essential?.skillAnalysisResults ?? [];
+  const preferred: SkillResult[] = data?.preferred?.skillAnalysisResults ?? [];
+  const matching: MatchSkill[] = data?.matchingSkills ?? [];
+  const missing: MatchSkill[] = data?.missingSkills ?? [];
+  const similarity: SimilaritySkill[] = data?.similarityScores ?? [];
+  const trends: TrendSkill[] = data?.trendData ?? [];
+  const resumeFeedback: FeedbackItem[] = data?.overallEvaluation?.resume_feedback ?? [];
+  const coverFeedback: FeedbackItem[] = data?.overallEvaluation?.cover_letter_feedback ?? [];
 
   // 피드백 카테고리 선택 상태
   const [selectedResumeCategories, setSelectedResumeCategories] = useState<string[]>(
@@ -68,21 +75,13 @@ export default function AnalysisReport({ data }: AnalysisReportProps) {
   );
 
   const toggleResumeCategory = (cat: string) =>
-    setSelectedResumeCategories((prev) =>
+    setSelectedResumeCategories((prev: string[]) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
     );
   const toggleCoverCategory = (cat: string) =>
-    setSelectedCoverCategories((prev) =>
+    setSelectedCoverCategories((prev: string[]) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
     );
-
-  // Chart data
-  const essential = data.essential.skillAnalysisResults;
-  const preferred = data.preferred.skillAnalysisResults;
-  const matching = data.matchingSkills ?? [];
-  const missing = data.missingSkills ?? [];
-  const similarity = data.similarityScores ?? [];
-  const trends = data.trendData ?? [];
 
   // 적합도 산출(평균값)
   const avg = (list: number[]) =>
@@ -323,11 +322,11 @@ export default function AnalysisReport({ data }: AnalysisReportProps) {
                   <div className="h-56">
                     <Line
                       data={{
-                        labels: t.history.map((h) => h.date),
+                        labels: t.history?.map((h) => h.date) ?? [],
                         datasets: [
                           {
                             label: '점수',
-                            data: t.history.map((h) => h.value),
+                            data: t.history?.map((h) => h.value) ?? [],
                             tension: 0.3,
                             fill: false,
                             borderColor: '#4f46e5',

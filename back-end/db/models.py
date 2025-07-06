@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, JSON, Integer, String
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -19,3 +19,11 @@ class Resume(Base):
     user_id = Column(ForeignKey("user.id"), index=True)
     resume_content = Column(String)
     text = Column(String)
+
+
+class Result(Base):
+    __tablename__ = "result"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(ForeignKey("user.id"), index=True)
+    result = Column(JSON)

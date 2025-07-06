@@ -1,8 +1,8 @@
 import httpx
-from fastapi import APIRouter, UploadFile, Depends, Header, File, Form
+from fastapi import APIRouter, UploadFile, Depends, Header, File, Form, Body
 from fastapi.exceptions import HTTPException
-from db import Repository, get_resume_repository
-from db.models import Resume
+from db import Repository, get_resume_repository, get_result_repository
+from db.models import Resume, Result
 from utils import extract_text_from_pdf, get_current_user_id
 from config import Config
 
@@ -41,3 +41,26 @@ async def upload_resume(
     )
     await repository.add_item(resume)
     return {"result": result}
+
+
+@resume_router.post("/save-result")
+async def save_result(
+    authorization: str = Header(...),
+    body: dict = Body(...),
+    repository: Repository = Depends(get_result_repository),
+):
+    result = Result(
+        user_id=int(get_current_user_id(authorization)),
+        result=body
+    )
+    result = await repository.add_item(result)
+    return {"result": result}
+
+
+@resume_router.get("/results")
+async def get_results(
+    authorization: str = Header(...),
+    repository: Repository = Depends(get_result_repository)
+):
+    results = await repository.get_all_by_user_id(int(get_current_user_id(authorization)))
+    return {"result": [{"id": r.id, "user_id": r.user_id, "result": r.result} for r in results]}

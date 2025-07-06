@@ -20,6 +20,7 @@ class Repository(Generic[T]):
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def get_all(self) -> list[T]:
-        result = await self.session.execute(select(self.model))
+    async def get_all_by_user_id(self, user_id: int) -> list[T]:
+        stmt = select(self.model).where(self.model.user_id == user_id)
+        result = await self.session.execute(stmt)
         return result.scalars().all()
