@@ -11,7 +11,7 @@ def get_vector_db_client():
     return VECTOR_DB_CLIENT
 
 
-def get_embedding(text, client, model="text-embedding-3-small"):
+def get_embedding(client, text, model="text-embedding-3-small"):
     text = text.replace("\n", " ")
     text = re.sub(r'\s+', ' ', text).strip()
     return client.embeddings.create(input = [text], model=model).data[0].embedding

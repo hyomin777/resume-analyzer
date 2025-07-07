@@ -32,7 +32,7 @@ async def upload_feedback(
     payload = {
         "user_id": user_id,
         "label": label,
-        "created_at": feedback.created_at
+        "created_at": feedback.created_at.isoformat()
     }
     async with httpx.AsyncClient() as client:
         response = await client.post(
