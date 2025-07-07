@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import AnalysisReport from "../components/AnalysisReport";
 
 export default function Analyze() {
@@ -8,11 +8,13 @@ export default function Analyze() {
   const [result, setResult] = useState<any>(null);
   const [saveStatus, setSaveStatus] = useState<null | "success" | "error" | "loading">(null);
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
-  
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
-        if (typeof window !== "undefined") {
-        setLoggedIn(!!localStorage.getItem("token"));
-        }
+    if (typeof window !== "undefined") {
+      setLoggedIn(!!localStorage.getItem("token"));
+    }
   }, []);
 
   const handleSubmit = async (e: any) => {
@@ -37,6 +39,7 @@ export default function Analyze() {
 
     setResult(data.result.result);
     setLoading(false);
+    setSaveStatus(null);
   };
 
   const handleSaveResult = async () => {
@@ -75,12 +78,51 @@ export default function Analyze() {
   return (
     <main className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">AI 이력서 역량 분석</h1>
-      <form className="space-y-4 mb-8" onSubmit={handleSubmit}>
-        <input type="file" accept=".pdf" onChange={e => setResume(e.target.files?.[0] || null)} required />
-        <textarea className="w-full border p-2 rounded" rows={4}
-          value={jd} onChange={e => setJD(e.target.value)}
-          placeholder="채용공고, JD를 입력하세요" required />
-        <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded">AI 분석 시작</button>
+      <form className="space-y-6 mb-8" onSubmit={handleSubmit}>
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold mb-1">이력서 PDF 업로드</label>
+          <input
+            type="file"
+            accept=".pdf"
+            ref={fileInputRef}
+            onChange={e => setResume(e.target.files?.[0] || null)}
+            className="hidden"
+            id="resume-upload"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="bg-indigo-600 text-white px-4 py-2 rounded shadow hover:bg-indigo-700 transition"
+          >
+            {resume ? "다시 선택하기" : "PDF 파일 선택"}
+          </button>
+          {resume && (
+            <div className="text-sm text-slate-700 mt-1 flex items-center gap-2">
+              <span className="font-mono">{resume.name}</span>
+              <span className="text-slate-400">({Math.round((resume.size / 1024) * 10) / 10} KB)</span>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <textarea
+            className="w-full border border-slate-300 p-2 rounded focus:outline-indigo-500"
+            rows={4}
+            value={jd}
+            onChange={e => setJD(e.target.value)}
+            placeholder="채용공고, JD를 입력하세요"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
+          disabled={loading}
+        >
+          {loading ? "분석 중..." : "AI 분석 시작"}
+        </button>
       </form>
       {loading && <div className="text-center">분석 중...</div>}
       {result && (

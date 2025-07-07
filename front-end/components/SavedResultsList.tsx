@@ -70,7 +70,7 @@ export default function SavedResultsList() {
           <h3 className="font-bold text-lg mb-3">
             결과 #{results[selected].id ?? selected + 1} 상세 보기
           </h3>
-          <AnalysisReport data={results[selected]?.result} />
+          <AnalysisReport data={results[selected]?.result?.result ?? {}} />
           <button
             className="mt-6 px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
             onClick={() => setSelected(null)}
