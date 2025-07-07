@@ -28,7 +28,7 @@ export default function Analyze() {
 
     const token = localStorage.getItem("token");
     const res = await fetch(
-      "/api/upload-resume",
+      "/api/resume",
       {
         method: "POST",
         body: form,
@@ -48,7 +48,7 @@ export default function Analyze() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("/api/save-result", {
+      const res = await fetch("/api/result", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

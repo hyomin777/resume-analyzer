@@ -8,11 +8,11 @@ from config import Config
 
 resume_router = APIRouter()
 
-@resume_router.post("/upload-resume")
+@resume_router.post("/resume")
 async def upload_resume(
     authorization: str = Header(...),
     file: UploadFile = File(...), 
-    text: str = Form(...),
+    jd_description: str = Form(default=None),
     repository: Repository = Depends(get_resume_repository),
 ):
     user_id = get_current_user_id(authorization)
@@ -20,13 +20,16 @@ async def upload_resume(
     if not file.filename.lower().endswith(".pdf"):
         return {"error": "Only PDF files are supported."}
     
-    content = await file.read()
-    resume_content = extract_text_from_pdf(content)
+    resume = await file.read()
+    content = extract_text_from_pdf(resume)
 
     async with httpx.AsyncClient() as client:
         response = await client.post(
-            url=Config.AI_SERVER_URL + "/api/analyze-resume",
-            json={"resume_content": resume_content, "text": text},
+            url=Config.AI_SERVER_URL + "/api/resume",
+            json={
+                "content": content,
+                "jd_description": jd_description
+            },
             timeout=120
         )
         if response.status_code != 200:
@@ -36,14 +39,14 @@ async def upload_resume(
 
     resume = Resume(
         user_id=int(user_id),
-        resume_content=resume_content,
-        text=text
+        content=content,
+        jd_description=jd_description
     )
     await repository.add_item(resume)
     return {"result": result}
 
 
-@resume_router.post("/save-result")
+@resume_router.post("/result")
 async def save_result(
     authorization: str = Header(...),
     body: dict = Body(...),
