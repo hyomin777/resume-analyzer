@@ -80,7 +80,7 @@ export default function Analyze() {
       <h1 className="text-2xl font-bold mb-6">AI 이력서 역량 분석</h1>
       <form className="space-y-6 mb-8" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-2">
-          <label className="font-semibold mb-1">이력서 PDF 업로드</label>
+          <label className="font-semibold mb-1 cursor-pointer">이력서 PDF 업로드</label>
           <input
             type="file"
             accept=".pdf"

@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import NavBar from "../layouts/NavBar";
 import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
 import SavedResultsList from "../components/SavedResultsList";
@@ -17,7 +16,7 @@ export default function Home() {
             <SignupForm onSignup={login} />
             <div className="text-center mt-2">
               이미 계정이 있으신가요?{" "}
-              <button className="text-blue-600 underline" onClick={() => setShowSignup(false)}>
+              <button className="text-blue-600 underline cursor-pointer" onClick={() => setShowSignup(false)}>
                 로그인하기
               </button>
             </div>
@@ -27,7 +26,7 @@ export default function Home() {
             <LoginForm onLogin={login} />
             <div className="text-center mt-2">
               계정이 없으신가요?{" "}
-              <button className="text-blue-600 underline" onClick={() => setShowSignup(true)}>
+              <button className="text-blue-600 underline cursor-pointer" onClick={() => setShowSignup(true)}>
                 회원가입
               </button>
             </div>
