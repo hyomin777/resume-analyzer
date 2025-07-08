@@ -1,3 +1,4 @@
+from typing import Optional, Union, List
 from fastapi import HTTPException, Depends
 from db.repositories import ResumeRepository, get_resume_repository
 from db.models import Resume, Education, Career, Certificate, Activity, Skill
@@ -32,9 +33,8 @@ class ResumeService:
         )
         return await self.repo.add_item(resume)
     
-    
-    async def get_resumes(self, user_id: int) -> list[Resume]:
-        return await self.repo.get_resume_with_relations(user_id=user_id)
+    async def get_resume(self, user_id: int, resume_id: Optional[int] = None) -> Union[Resume, List[Resume], None]:
+        return await self.repo.get_resume_with_relations(user_id, resume_id)
 
 
     async def build_resume_content(self, user_id: int, resume_id: int) -> str:

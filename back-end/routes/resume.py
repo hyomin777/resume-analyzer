@@ -26,6 +26,22 @@ async def create_resume(
         raise HTTPException(status_code=400, detail=str(e))
     
 
+@resume_router.get("/resume/{resume_id}", response_model=ResumeOut)
+async def get_resume(
+    resume_id: int,
+    service: ResumeService = Depends(get_resume_service),
+    authorization: str = Header(...),
+):
+    try:
+        user_id = int(get_current_user_id(authorization))
+        resume = await service.get_resume(user_id=user_id, resume_id=resume_id)
+        if not resume:
+            raise HTTPException(status_code=404, detail="Resume not found")
+        return resume
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+
 @resume_router.get("/resumes", response_model=List[ResumeOut])
 async def get_resumes(
     service: ResumeService = Depends(get_resume_service),
@@ -33,7 +49,7 @@ async def get_resumes(
 ):
     try:
         user_id = int(get_current_user_id(authorization))
-        resumes = await service.get_resumes(user_id)
+        resumes = await service.get_resume(user_id)
         return resumes
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
