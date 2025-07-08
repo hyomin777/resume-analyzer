@@ -1,26 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-type Education = { id: number; school: string; major?: string; period?: string; status?: string; };
-type Career = { id: number; company: string; role?: string; period?: string; description?: string; };
-type Certificate = { id: number; title: string; issuer?: string; date?: string; };
-type Activity = { id: number; title: string; org?: string; period?: string; description?: string; };
-type Skill = { id: number; name: string; };
-
-type Resume = {
-  id: number;
-  user_id: number;
-  content?: string;
-  portfolio?: string;
-  is_pdf?: boolean;
-  created_at?: string;
-  updated_at?: string;
-  education: Education[];
-  career: Career[];
-  certificate: Certificate[];
-  activity: Activity[];
-  skills: Skill[];
-};
+import type { Resume } from "@/types/resume";
 
 export default function ResumeListPage() {
   const [resumes, setResumes] = useState<Resume[]>([]);
@@ -43,7 +23,6 @@ export default function ResumeListPage() {
           setResumes([]);
         } else {
           const data = await res.json();
-          console.log(data)
           setResumes(data || []);
         }
       } catch {
