@@ -1,7 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
-from db import Repository, get_session
+from db import get_session
+from db.repositories import Repository
 from db.models import User
 
 class UserRepository(Repository[User]):
