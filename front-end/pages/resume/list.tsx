@@ -35,7 +35,7 @@ export default function ResumeListPage() {
       setError(null);
       const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
       try {
-        const res = await fetch("/api/resume/list", {
+        const res = await fetch("/api/resumes", {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         if (!res.ok) {
@@ -43,7 +43,8 @@ export default function ResumeListPage() {
           setResumes([]);
         } else {
           const data = await res.json();
-          setResumes(data.result || []);
+          console.log(data)
+          setResumes(data || []);
         }
       } catch {
         setError("네트워크 에러");
@@ -56,7 +57,6 @@ export default function ResumeListPage() {
 
   if (loading) return <div className="text-center mt-10">불러오는 중...</div>;
   if (error) return <div className="text-center text-red-600 mt-10">{error}</div>;
-  if (!resumes.length) return <div className="text-center mt-10">저장된 이력서가 없습니다.</div>;
 
   return (
     <main className="max-w-3xl mx-auto p-6">
@@ -94,7 +94,7 @@ export default function ResumeListPage() {
       </ul>
       <div className="mt-8 text-center">
         <button
-          onClick={() => router.push("/resume/new")}
+          onClick={() => router.push("/resume")}
           className="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700"
         >
           + 새 이력서 작성

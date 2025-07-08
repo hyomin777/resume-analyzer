@@ -1,3 +1,4 @@
+from typing import Optional, List, Union
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlalchemy.future import select
@@ -26,20 +27,27 @@ class ResumeRepository(Repository[Resume]):
         )
         return result.scalars().first()
 
-    async def get_resume_with_relations(self, resume_id: int, user_id: int):
-        result = await self.session.execute(
-            select(Resume)
-            .where(Resume.id == resume_id, Resume.user_id == user_id)
-            .options(
-                selectinload(Resume.education),
-                selectinload(Resume.career),
-                selectinload(Resume.certificate),
-                selectinload(Resume.activity),
-                selectinload(Resume.skills),
-            )
+    async def get_resume_with_relations(
+        self, user_id: int, resume_id: Optional[int] = None
+    ) -> Union[Resume, List[Resume], None]:
+        stmt = select(Resume).where(
+            Resume.user_id == user_id
+        ).options(
+            selectinload(Resume.education),
+            selectinload(Resume.career),
+            selectinload(Resume.certificate),
+            selectinload(Resume.activity),
+            selectinload(Resume.skills),
         )
-        resume = result.scalars().first()
-        return resume
+        if resume_id is not None:
+            stmt = stmt.where(Resume.id == resume_id)
+
+        result = await self.session.execute(stmt)
+        if resume_id is not None:
+            return result.scalars().first()
+        else:
+            return result.scalars().all()
+
 
 def get_resume_repository(session: AsyncSession = Depends(get_session)) -> ResumeRepository:
     return ResumeRepository(session)

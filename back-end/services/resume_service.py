@@ -31,8 +31,12 @@ class ResumeService:
             is_pdf=True
         )
         return await self.repo.add_item(resume)
-
     
+    
+    async def get_resumes(self, user_id: int) -> list[Resume]:
+        return await self.repo.get_resume_with_relations(user_id=user_id)
+
+
     async def build_resume_content(self, user_id: int, resume_id: int) -> str:
         resume = await self.repo.get_resume_with_relations(resume_id, user_id)
         if not resume:

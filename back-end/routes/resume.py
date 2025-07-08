@@ -1,5 +1,5 @@
 import httpx
-from typing import Optional
+from typing import Optional, List
 from fastapi import APIRouter, UploadFile, Depends, Header, File, Form, Body
 from fastapi.exceptions import HTTPException
 from db.models import Result
@@ -22,6 +22,19 @@ async def create_resume(
         user_id = int(get_current_user_id(authorization))
         result = await service.create_resume(user_id, resume)
         return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+
+@resume_router.get("/resumes", response_model=List[ResumeOut])
+async def get_resumes(
+    service: ResumeService = Depends(get_resume_service),
+    authorization: str = Header(...)
+):
+    try:
+        user_id = int(get_current_user_id(authorization))
+        resumes = await service.get_resumes(user_id)
+        return resumes
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     
