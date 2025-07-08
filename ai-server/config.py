@@ -11,4 +11,4 @@ class Config:
     QDRANT_URL = os.getenv("QDRANT_URL")
     QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 
-    HIDDEN_DIM = 1024
+    HIDDEN_DIM = 1536

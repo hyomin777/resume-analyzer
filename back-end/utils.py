@@ -1,5 +1,5 @@
 from typing import Union
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 import fitz
 from jose import JWTError, jwt
@@ -28,7 +28,7 @@ def extract_text_from_pdf(pdf_bytes: Union[bytes, bytearray]) -> str:
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=Config.JWT_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=Config.JWT_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, Config.JWT_SECRET_KEY, algorithm=Config.JWT_ALGORITHM)
 

@@ -14,6 +14,9 @@ export default function NavBar() {
         <Link href="/analyze">
           <span className="text-green-700 hover:underline cursor-pointer">Resume Analysis</span>
         </Link>
+        <Link href="/feedback">
+          <span className="text-green-700 hover:underline cursor-pointer">Feedback Upload</span>
+        </Link>
         {loggedIn && <LogoutButton onLogout={logout} />}
       </div>
     </nav>

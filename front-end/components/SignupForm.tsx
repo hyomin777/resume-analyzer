@@ -39,7 +39,7 @@ export default function SignupForm({ onSignup }: { onSignup: () => void }) {
 
   return (
     <form className="space-y-4 max-w-xs mx-auto mt-20" onSubmit={handleSignup}>
-      <h2 className="text-xl font-bold">회원가입</h2>
+      <h2 className="text-xl font-bold cursor-pointer">회원가입</h2>
       <input
         className="w-full border p-2 rounded"
         placeholder="아이디"

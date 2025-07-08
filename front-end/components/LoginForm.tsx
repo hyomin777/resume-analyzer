@@ -30,7 +30,7 @@ export default function LoginForm({ onLogin }: { onLogin: () => void }) {
 
   return (
     <form className="space-y-4 max-w-xs mx-auto mt-20" onSubmit={handleLogin}>
-      <h2 className="text-xl font-bold">로그인</h2>
+      <h2 className="text-xl font-bold cursor-pointer">로그인</h2>
       <input
         className="w-full border p-2 rounded"
         placeholder="아이디"

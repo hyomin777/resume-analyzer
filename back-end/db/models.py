@@ -1,4 +1,6 @@
-from sqlalchemy import Column, ForeignKey, JSON, Integer, String
+from datetime import datetime, timezone
+from sqlalchemy import Column, ForeignKey, JSON, Integer, String, Text
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -17,8 +19,19 @@ class Resume(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(ForeignKey("user.id"), index=True)
-    resume_content = Column(String)
-    text = Column(String)
+    content = Column(Text)
+    jd_description = Column(Text, nullable=True)
+
+
+class Feedback(Base):
+    __tablename__ = "feedback"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(ForeignKey("user.id"), index=True)
+    resume_content = Column(Text)
+    jd_description = Column(Text, nullable=True)
+    feedback = Column(Text, nullable=True)
+    label = Column(String, nullable=True)  # 'Pass', 'Fail'
+    created_at = Column(TIMESTAMP(timezone=True), default=lambda: datetime.now(timezone.utc))
 
 
 class Result(Base):

@@ -66,12 +66,11 @@ class OutputModel(BaseModel):
 def create_system_prompt():
     prompt = f'''
         너는 인사 컨설팅 전문가 AI다.
-        사용자의 입력 내용: [직무 설명/JD] & [이력서]을 분석해서, 반드시 아래 [Output JSON Schema 예시]를 따라 '직무 역량 분석 및 컨설팅 결과'를 **JSON만으로** 작성하라.
+        사용자의 입력 내용: [이력서]를 분석해서, 아래 [Output JSON Schema 예시]를 따라 '직무 역량 분석 및 컨설팅 결과'를 **JSON만으로** 작성하라.
         
         ---
 
         [중요]
-        - 반드시 [이력서]와 [직무 설명]을 반드시 **서로 연관지어** 분석하라.
         - 모든 평가 항목(essential, preferred 등)에 대해, 
             - 이력서가 JD의 요구에 **잘 부합하는 부분**(예시, 강점, 어필 요소)
             - **아쉬운 부분**(누락, 구체성 부족, 보완 필요 등) 
@@ -146,14 +145,9 @@ def create_system_prompt():
     return prompt
 
 
-def create_user_prompt(resume_content, text):
-    prompt = f'''
-        [직무 설명/JD]
-        {text}
-
-        ---
-
-        [이력서]
-        {resume_content}
-    '''
+def create_user_prompt(resume_content, jd_description=None):
+    if jd_description is not None:
+        prompt = f"[직무 설명/JD]:{jd_description} [이력서]:{resume_content}"
+    else:
+        prompt = f"[이력서]:{resume_content}"
     return prompt
