@@ -13,15 +13,15 @@ user_router = APIRouter()
 async def create_user(
     username: str = Body(...),
     password: str = Body(...),
-    password_check: str = Body(...),
+    confirm: str = Body(...),
     repository: UserRepository = Depends(get_user_repository)
 ):
     user = await repository.get_user_by_username(username)
     if user:
         raise HTTPException(status_code=400, detail=f"Username: {username} already exists")
     
-    if password != password_check:
-        raise HTTPException(status_code=400, detail="Password and password check is not same")
+    if password != confirm:
+        raise HTTPException(status_code=400, detail="Password and password confirm is not same")
     
     user = User(
         username=username,

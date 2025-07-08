@@ -4,20 +4,31 @@ import type { Resume } from "@/types/resume";
 
 export default function ResumeListPage() {
   const [resumes, setResumes] = useState<Resume[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    const fetchResumes = async () => {
-      setLoading(true);
-      setError(null);
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
-      try {
-        const res = await fetch("/api/resumes", {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      setLoggedIn(!!token);
+      if (!token) {
+        router.replace("/login");
+      }
+    }
+  }, [router]);
+
+  useEffect(() => {
+    if (loggedIn !== true) return;
+    setLoading(true);
+    setError(null);
+    const token = localStorage.getItem("token");
+    fetch("/api/resumes", {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then(async (res) => {
         if (!res.ok) {
           setError("이력서 목록을 불러오지 못했습니다.");
           setResumes([]);
@@ -25,15 +36,17 @@ export default function ResumeListPage() {
           const data = await res.json();
           setResumes(data || []);
         }
-      } catch {
+      })
+      .catch(() => {
         setError("네트워크 에러");
         setResumes([]);
-      }
-      setLoading(false);
-    };
-    fetchResumes();
-  }, []);
+      })
+      .finally(() => setLoading(false));
+  }, [loggedIn]);
 
+  if (loggedIn !== true) {
+    return null;
+  }
   if (loading) return <div className="text-center mt-10">불러오는 중...</div>;
   if (error) return <div className="text-center text-red-600 mt-10">{error}</div>;
 
