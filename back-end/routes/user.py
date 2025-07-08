@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Body, Header
 from fastapi.exceptions import HTTPException
-from db import UserRepository, get_user_repository
 from db.models import User
+from db.repositories import UserRepository, get_user_repository
 from utils import (
     hash_password, verify_password,
     create_access_token, verify_access_token

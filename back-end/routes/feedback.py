@@ -2,8 +2,8 @@ import httpx
 from typing import Optional
 from fastapi import APIRouter, Depends, Header, Body
 from fastapi.exceptions import HTTPException
-from db import Repository, get_feedback_repository
 from db.models import Feedback
+from db.repositories import Repository, get_feedback_repository
 from utils import get_current_user_id
 from config import Config
 

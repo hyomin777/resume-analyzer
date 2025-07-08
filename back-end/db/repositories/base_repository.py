@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import TypeVar, Generic, Type
 
@@ -24,3 +24,9 @@ class Repository(Generic[T]):
         stmt = select(self.model).where(self.model.user_id == user_id)
         result = await self.session.execute(stmt)
         return result.scalars().all()
+    
+    async def count_by_user_id(self, user_id: int) -> int:
+        result = await self.session.execute(
+            select(func.count()).select_from(self.model).where(self.model.user_id == user_id)
+        )
+        return result.scalar()

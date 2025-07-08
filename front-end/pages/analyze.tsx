@@ -28,7 +28,7 @@ export default function Analyze() {
 
     const token = localStorage.getItem("token");
     const res = await fetch(
-      "/api/resume",
+      "/api/resume/analyze",
       {
         method: "POST",
         body: form,

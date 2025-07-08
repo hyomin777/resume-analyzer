@@ -11,6 +11,12 @@ export default function NavBar() {
         <span className="text-indigo-700 hover:underline cursor-pointer">Home</span>
       </Link>
       <div className="flex gap-6 items-center">
+        <Link href="/resume">
+          <span className="text-green-700 hover:underline cursor-pointer">Create Resume</span>
+        </Link>
+        <Link href="/resume/list">
+          <span className="text-green-700 hover:underline cursor-pointer">Resume List</span>
+        </Link>
         <Link href="/analyze">
           <span className="text-green-700 hover:underline cursor-pointer">Resume Analysis</span>
         </Link>
