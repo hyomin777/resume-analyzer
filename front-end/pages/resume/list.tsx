@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Resume } from "@/types/resume";
+import withAuthProtection from "@/utils/withAuthProtection";
 
-export default function ResumeListPage() {
+function ResumeListPage() {
   const [resumes, setResumes] = useState<Resume[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    const fetchResumes = async () => {
-      setLoading(true);
-      setError(null);
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
-      try {
-        const res = await fetch("/api/resumes", {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    setLoading(true);
+    setError(null);
+
+    fetch("/api/resumes", {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then(async (res) => {
         if (!res.ok) {
           setError("이력서 목록을 불러오지 못했습니다.");
           setResumes([]);
@@ -25,13 +28,12 @@ export default function ResumeListPage() {
           const data = await res.json();
           setResumes(data || []);
         }
-      } catch {
+      })
+      .catch(() => {
         setError("네트워크 에러");
         setResumes([]);
-      }
-      setLoading(false);
-    };
-    fetchResumes();
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="text-center mt-10">불러오는 중...</div>;
@@ -82,3 +84,5 @@ export default function ResumeListPage() {
     </main>
   );
 }
+
+export default withAuthProtection(ResumeListPage);

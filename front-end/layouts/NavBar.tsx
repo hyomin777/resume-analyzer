@@ -1,9 +1,10 @@
 import Link from "next/link";
+import LoginButton from "../components/LoginButton";
 import LogoutButton from "../components/LogoutButton";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function NavBar() {
-  const { loggedIn, logout } = useAuth();
+  const { loggedIn } = useAuth();
 
   return (
     <nav className="flex justify-between items-center py-4 px-8 bg-gray-50 border-b mb-8">
@@ -23,7 +24,11 @@ export default function NavBar() {
         <Link href="/feedback">
           <span className="text-green-700 hover:underline cursor-pointer">Feedback Upload</span>
         </Link>
-        {loggedIn && <LogoutButton onLogout={logout} />}
+        {loggedIn ? (
+          <LogoutButton />
+        ) : (
+          <LoginButton />
+        )}
       </div>
     </nav>
   );

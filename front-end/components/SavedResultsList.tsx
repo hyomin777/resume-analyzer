@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AnalysisReport from "../components/AnalysisReport";
+import AnalysisReport from "@/components/AnalysisReport";
 
 export default function SavedResultsList() {
   const [results, setResults] = useState<any[]>([]);

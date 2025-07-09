@@ -1,6 +1,7 @@
 import { useState } from "react";
+import withAuthProtection from "@/utils/withAuthProtection";
 
-export default function Feedback() {
+function Feedback() {
   const [resumeContent, setResumeContent] = useState("");
   const [jdDescription, setJdDescription] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -106,3 +107,5 @@ export default function Feedback() {
     </div>
   );
 }
+
+export default withAuthProtection(Feedback);

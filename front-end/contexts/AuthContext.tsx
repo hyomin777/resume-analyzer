@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 type AuthContextType = {
   loggedIn: boolean;
-  login: () => void;
+  login: (token: string) => void;
   logout: () => void;
 };
 
@@ -19,7 +19,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (localStorage.getItem("token")) setLoggedIn(true);
   }, []);
 
-  const login = () => setLoggedIn(true);
+  const login = (token: string) => {
+    localStorage.setItem("token", token);
+    setLoggedIn(true);
+  };
   const logout = () => {
     localStorage.removeItem("token");
     setLoggedIn(false);

@@ -1,21 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import AnalysisReport from "../components/AnalysisReport";
+import { useRouter } from "next/router";
+import { useAuth } from "@/contexts/AuthContext";
+import withAuthProtection from "@/utils/withAuthProtection";
+import AnalysisReport from "@/components/AnalysisReport";
 
-export default function Analyze() {
+function Analyze() {
   const [resume, setResume] = useState<File | null>(null);
   const [jd, setJD] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [saveStatus, setSaveStatus] = useState<null | "success" | "error" | "loading">(null);
-  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setLoggedIn(!!localStorage.getItem("token"));
-    }
-  }, []);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -67,13 +62,6 @@ export default function Analyze() {
       setSaveStatus("error");
     }
   };
-
-  if (loggedIn === false) {
-    return <div className="text-center mt-12">로그인 후 이용해 주세요.</div>;
-  }
-  if (loggedIn === null) {
-    return <div className="text-center mt-12">로딩 중...</div>;
-  }
 
   return (
     <main className="max-w-2xl mx-auto p-6">
@@ -148,3 +136,5 @@ export default function Analyze() {
     </main>
   );
 }
+
+export default withAuthProtection(Analyze);
