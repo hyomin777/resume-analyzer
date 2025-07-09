@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
+import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -8,6 +10,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +24,7 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (res.ok && data.access_token) {
-        localStorage.setItem("token", data.access_token);
+        login(data.access_token);
         router.push("/resume/list");
       } else {
         setError(data.detail || "로그인에 실패했습니다.");
@@ -68,7 +71,7 @@ export default function LoginPage() {
       </form>
       <div className="text-center mt-4">
         계정이 없으신가요?{" "}
-        <a href="/signup" className="text-blue-600 underline">회원가입</a>
+        <Link href="/signup" className="text-blue-600 underline">회원가입</Link>
       </div>
     </main>
   );

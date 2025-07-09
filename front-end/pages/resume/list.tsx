@@ -1,30 +1,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Resume } from "@/types/resume";
+import withAuthProtection from "@/utils/withAuthProtection";
 
-export default function ResumeListPage() {
+function ResumeListPage() {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(false);
-  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      setLoggedIn(!!token);
-      if (!token) {
-        router.replace("/login");
-      }
-    }
-  }, [router]);
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-  useEffect(() => {
-    if (loggedIn !== true) return;
     setLoading(true);
     setError(null);
-    const token = localStorage.getItem("token");
+
     fetch("/api/resumes", {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
@@ -42,11 +34,8 @@ export default function ResumeListPage() {
         setResumes([]);
       })
       .finally(() => setLoading(false));
-  }, [loggedIn]);
+  }, []);
 
-  if (loggedIn !== true) {
-    return null;
-  }
   if (loading) return <div className="text-center mt-10">불러오는 중...</div>;
   if (error) return <div className="text-center text-red-600 mt-10">{error}</div>;
 
@@ -95,3 +84,5 @@ export default function ResumeListPage() {
     </main>
   );
 }
+
+export default withAuthProtection(ResumeListPage);

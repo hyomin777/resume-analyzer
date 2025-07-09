@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import type { Resume } from "@/types/resume";
+import withAuthProtection from "@/utils/withAuthProtection";
 
-export default function ResumeDetailPage() {
+function ResumeDetailPage() {
   const router = useRouter();
-  const params = typeof window !== "undefined" ? window.location.pathname.split("/") : [];
-  const resumeId = params.length > 2 ? params[2] : "";
+  const resumeId = router.query?.id as string;
 
   const [resume, setResume] = useState<Resume | null>(null);
   const [loading, setLoading] = useState(true);
@@ -150,3 +150,5 @@ export default function ResumeDetailPage() {
     </main>
   );
 }
+
+export default withAuthProtection(ResumeDetailPage);

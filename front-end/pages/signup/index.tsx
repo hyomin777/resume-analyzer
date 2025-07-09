@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function SignupPage() {
   const [username, setUsername] = useState("");
@@ -90,7 +91,7 @@ export default function SignupPage() {
       </form>
       <div className="text-center mt-4">
         이미 계정이 있으신가요?{" "}
-        <a href="/login" className="text-blue-600 underline">로그인</a>
+        <Link href="/login" className="text-blue-600 underline">로그인</Link>
       </div>
     </main>
   );
