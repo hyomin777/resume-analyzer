@@ -55,7 +55,7 @@ async def get_resumes(
         raise HTTPException(status_code=400, detail=str(e))
     
 
-@resume_router.post("/resume/analyze")
+@resume_router.post("/resume/analysis")
 async def analyze_resume(
     authorization: str = Header(...),
     file: Optional[UploadFile] = File(None),
