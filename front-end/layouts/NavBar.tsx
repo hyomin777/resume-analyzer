@@ -18,8 +18,11 @@ export default function NavBar() {
         <Link href="/resume/list">
           <span className="text-green-700 hover:underline cursor-pointer">Resume List</span>
         </Link>
-        <Link href="/analyze">
+        <Link href="/analysis">
           <span className="text-green-700 hover:underline cursor-pointer">Resume Analysis</span>
+        </Link>
+        <Link href="/analysis/list">
+          <span className="text-green-700 hover:underline cursor-pointer">Analysis List</span>
         </Link>
         <Link href="/feedback">
           <span className="text-green-700 hover:underline cursor-pointer">Feedback Upload</span>
