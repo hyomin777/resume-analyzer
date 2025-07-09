@@ -38,7 +38,7 @@ class ResumeService:
 
 
     async def build_resume_content(self, user_id: int, resume_id: int) -> str:
-        resume = await self.repo.get_resume_with_relations(resume_id, user_id)
+        resume = await self.repo.get_resume_with_relations(user_id, resume_id)
         if not resume:
             raise HTTPException(status_code=404, detail="Resume not found")
 
