@@ -40,7 +40,8 @@ class ResumeService:
         resume = Resume(
             user_id=user_id,
             content=content,
-            is_pdf=True
+            is_pdf=True,
+            is_active=False
         )
         result = await self.repo.add_item(resume)
         return result
@@ -66,16 +67,13 @@ class ResumeService:
 
     async def patch_resume(self, user_id: int, resume_id: int, resume_data: ResumeCreate) -> Resume:
         async with self.repo.session.begin():
-            await self.repo.deactivate_resume(user_id, resume_id, False)
+            await self.repo.deactivate_resume(user_id, resume_id)
             result = await self.create_resume(user_id, resume_data, False)
         return result
     
 
-    async def deactivate_resume(self, user_id: int, resume_id: int, transaction: bool = True):
-        if transaction:
-            async with self.repo.session.begin():
-                resume = await self.repo.deactivate_resume(user_id, resume_id)
-        else:
+    async def deactivate_resume(self, user_id: int, resume_id: int):
+        async with self.repo.session.begin():
             resume = await self.repo.deactivate_resume(user_id, resume_id)
         return resume
 

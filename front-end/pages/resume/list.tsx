@@ -26,7 +26,6 @@ function ResumeListPage() {
           setResumes([]);
         } else {
           const data = await res.json();
-          console.log(data)
           setResumes(data || []);
         }
       })
