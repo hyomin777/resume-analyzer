@@ -46,15 +46,38 @@ class ResumeService:
         return result
     
 
-    async def get_resume(self, user_id: int, resume_id: Optional[int] = None) -> Union[Resume, List[Resume], None]:
-        return await self.repo.get_resume_with_relations(user_id, resume_id)
+    async def get_resume(
+        self,
+        user_id: int,
+        resume_id: Optional[int] = None,
+        is_active: bool = True
+    ) -> Union[Resume, List[Resume], None]:
+        return await self.repo.get_resume(user_id, resume_id, is_active)
     
+
+    async def get_resume_with_relations(
+        self,
+        user_id: int,
+        resume_id: Optional[int] = None,
+        is_active: bool = True
+    ) -> Union[Resume, List[Resume], None]:
+        return await self.repo.get_resume_with_relations(user_id, resume_id, is_active)
+
 
     async def patch_resume(self, user_id: int, resume_id: int, resume_data: ResumeCreate) -> Resume:
         async with self.repo.session.begin():
-            await self.repo.deactivate_resume(user_id, resume_id)
+            await self.repo.deactivate_resume(user_id, resume_id, False)
             result = await self.create_resume(user_id, resume_data, False)
         return result
+    
+
+    async def deactivate_resume(self, user_id: int, resume_id: int, transaction: bool = True):
+        if transaction:
+            async with self.repo.session.begin():
+                resume = await self.repo.deactivate_resume(user_id, resume_id)
+        else:
+            resume = await self.repo.deactivate_resume(user_id, resume_id)
+        return resume
 
 
     async def build_resume_content(self, user_id: int, resume_id: int) -> str:

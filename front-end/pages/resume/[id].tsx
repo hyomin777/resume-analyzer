@@ -10,6 +10,7 @@ function ResumeDetailPage() {
   const [resume, setResume] = useState<Resume | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (!resumeId) return;
@@ -36,6 +37,27 @@ function ResumeDetailPage() {
     };
     fetchResume();
   }, [resumeId]);
+
+  const handleDelete = async () => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    setIsDeleting(true);
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
+    try {
+      const res = await fetch(`/api/resume/${resumeId}/deactivate`, {
+        method: "PATCH",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!res.ok) {
+        alert("이력서 삭제에 실패했습니다.");
+      } else {
+        alert("이력서가 삭제되었습니다.");
+        router.push("/resume/list");
+      }
+    } catch {
+      alert("네트워크 에러: 삭제 실패");
+    }
+    setIsDeleting(false);
+  };
 
   if (loading) return <div className="text-center mt-10">불러오는 중...</div>;
   if (error) return <div className="text-center text-red-600 mt-10">{error}</div>;
@@ -151,6 +173,14 @@ function ResumeDetailPage() {
           className="bg-indigo-600 text-white px-4 py-2 rounded"
           onClick={() => router.push(`/resume/edit?id=${resume.id}`)}
         >수정
+        </button>
+
+        <button
+          className="bg-red-600 text-white px-4 py-2 rounded"
+          onClick={handleDelete}
+          disabled={isDeleting}
+        >
+          {isDeleting ? "삭제 중..." : "삭제"}
         </button>
       </div>
     </main>

@@ -99,6 +99,19 @@ class ResumeOut(BaseModel):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
+    class Config:
+        from_attributes = True
+
+
+class ResumeWithRelationsOut(BaseModel):
+    id: int
+    user_id: int
+    content: Optional[str] = None
+    portfolio: Optional[str] = None
+    is_pdf: Optional[bool] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
     education: List[EducationOut] = []
     career: List[CareerOut] = []
     certificate: List[CertificateOut] = []
