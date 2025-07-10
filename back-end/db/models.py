@@ -21,6 +21,7 @@ class Resume(Base):
     content = Column(Text)
     portfolio = Column(String(256))
     is_pdf = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
     updated_at = Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 

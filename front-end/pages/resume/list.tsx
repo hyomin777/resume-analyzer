@@ -56,20 +56,6 @@ function ResumeListPage() {
             <div className="text-sm text-slate-700 truncate">
               {resume.content?.slice(0, 70) || <span className="text-gray-400">(내용 없음)</span>}
             </div>
-            <div className="flex flex-wrap gap-2 text-xs">
-              {resume.skills.map(s => (
-                <span key={s.id} className="px-2 py-0.5 rounded bg-indigo-100 text-indigo-700">{s.name}</span>
-              ))}
-            </div>
-            <div className="text-xs text-slate-400">
-              {resume.education.map(e => e.school).join(", ")}
-              {resume.portfolio && (
-                <>
-                  <span className="mx-1 text-gray-300">|</span>
-                  <a href={resume.portfolio} target="_blank" rel="noopener noreferrer" className="underline text-blue-700">포트폴리오</a>
-                </>
-              )}
-            </div>
           </li>
         ))}
       </ul>

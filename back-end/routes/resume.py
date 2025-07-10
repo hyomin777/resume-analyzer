@@ -5,14 +5,14 @@ from fastapi.exceptions import HTTPException
 from db.models import Result
 from db.repositories import ResultRepository, get_result_repository
 from services import ResumeService, get_resume_service
-from schemas import ResumeCreate, ResumeOut
+from schemas import ResumeCreate, ResumeOut, ResumeWithRelationsOut
 from utils import get_current_user_id
 from config import Config
 
 resume_router = APIRouter()
 
 
-@resume_router.post("/resume", response_model=ResumeOut)
+@resume_router.post("/resume", response_model=ResumeWithRelationsOut)
 async def create_resume(
     resume: ResumeCreate,
     service: ResumeService = Depends(get_resume_service),
@@ -26,7 +26,7 @@ async def create_resume(
         raise HTTPException(status_code=400, detail=str(e))
     
 
-@resume_router.get("/resume/{resume_id}", response_model=ResumeOut)
+@resume_router.get("/resume/{resume_id}", response_model=ResumeWithRelationsOut)
 async def get_resume(
     resume_id: int,
     service: ResumeService = Depends(get_resume_service),
@@ -34,7 +34,7 @@ async def get_resume(
 ):
     try:
         user_id = int(get_current_user_id(authorization))
-        resume = await service.get_resume(user_id=user_id, resume_id=resume_id)
+        resume = await service.get_resume_with_relations(user_id=user_id, resume_id=resume_id)
         if not resume:
             raise HTTPException(status_code=404, detail="Resume not found")
         return resume
@@ -54,6 +54,35 @@ async def get_resumes(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     
+
+@resume_router.patch("/resume/{resume_id}", response_model=ResumeOut)
+async def patch_resume(
+    resume_id: int,
+    resume: ResumeCreate,
+    service: ResumeService = Depends(get_resume_service),
+    authorization: str = Header(...)
+):
+    try:
+        user_id = int(get_current_user_id(authorization))
+        result = await service.patch_resume(user_id, resume_id, resume)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@resume_router.patch("/resume/{resume_id}/deactivate", response_model=ResumeOut)
+async def deactivate_resume(
+    resume_id: int,
+    service: ResumeService = Depends(get_resume_service),
+    authorization: str = Header(...)
+):
+    try:
+        user_id = int(get_current_user_id(authorization))
+        result = await service.deactivate_resume(user_id, resume_id)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 
 @resume_router.post("/resume/analysis")
 async def analyze_resume(
