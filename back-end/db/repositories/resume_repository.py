@@ -11,9 +11,10 @@ class ResumeRepository(Repository[Resume]):
     def __init__(self, session: AsyncSession):
         super().__init__(session, Resume)
 
+
     async def add_resume_with_relations(self, resume: Resume) -> Resume:
         self.session.add(resume)
-        await self.session.commit()
+        await self.session.flush()
         result = await self.session.execute(
             select(Resume)
             .where(Resume.id == resume.id)
@@ -27,11 +28,13 @@ class ResumeRepository(Repository[Resume]):
         )
         return result.scalars().first()
 
+
     async def get_resume_with_relations(
         self, user_id: int, resume_id: Optional[int] = None
     ) -> Union[Resume, List[Resume], None]:
         stmt = select(Resume).where(
-            Resume.user_id == user_id
+            Resume.user_id == user_id,
+            Resume.is_active == True
         ).options(
             selectinload(Resume.education),
             selectinload(Resume.career),
@@ -40,13 +43,29 @@ class ResumeRepository(Repository[Resume]):
             selectinload(Resume.skills),
         )
         if resume_id is not None:
-            stmt = stmt.where(Resume.id == resume_id)
+            stmt = stmt.where(
+                Resume.id == resume_id,
+                Resume.is_active == True
+            )
 
         result = await self.session.execute(stmt)
         if resume_id is not None:
             return result.scalars().first()
         else:
             return result.scalars().all()
+        
+
+    async def deactivate_resume(self, user_id: int, resume_id: int):
+        stmt = (
+            select(Resume)
+            .where(Resume.id == resume_id, Resume.user_id == user_id)
+        )
+        result = await self.session.execute(stmt)
+        resume = result.scalars().first()
+        if not resume:
+            return None
+        resume.is_active = False
+        return resume
 
 
 def get_resume_repository(session: AsyncSession = Depends(get_session)) -> ResumeRepository:

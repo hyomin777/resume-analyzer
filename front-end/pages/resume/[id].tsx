@@ -144,8 +144,14 @@ function ResumeDetailPage() {
         <button
           className="bg-gray-200 px-4 py-2 rounded"
           onClick={() => router.push("/resume/list")}
-        >목록으로</button>
-        {/* 수정/삭제/분석 버튼 등도 여기에 추가 가능 */}
+        >목록으로
+        </button>
+        
+        <button
+          className="bg-indigo-600 text-white px-4 py-2 rounded"
+          onClick={() => router.push(`/resume/edit?id=${resume.id}`)}
+        >수정
+        </button>
       </div>
     </main>
   );

@@ -9,7 +9,12 @@ class ResumeService:
     def __init__(self, repo: ResumeRepository):
         self.repo = repo
 
-    async def create_resume(self, user_id: int, resume_data: ResumeCreate) -> Resume:
+    async def create_resume(
+            self,
+            user_id: int,
+            resume_data: ResumeCreate,
+            transaction: bool = True
+        ) -> Resume:
         resume = Resume(
             user_id=user_id,
             content=resume_data.content,
@@ -21,7 +26,13 @@ class ResumeService:
         resume.certificate = [Certificate(**c.model_dump()) for c in (resume_data.certificate or [])]
         resume.activity = [Activity(**a.model_dump()) for a in (resume_data.activity or [])]
         resume.skills = [Skill(**s.model_dump()) for s in (resume_data.skills or [])]
-        return await self.repo.add_resume_with_relations(resume)
+
+        if transaction:
+            async with self.repo.session.begin():
+                result = await self.repo.add_resume_with_relations(resume)
+        else:
+            result = await self.repo.add_resume_with_relations(resume)
+        return result
     
     
     async def create_resume_from_pdf(self, user_id: int, pdf_bytes: bytes) -> Resume:
@@ -31,14 +42,24 @@ class ResumeService:
             content=content,
             is_pdf=True
         )
-        return await self.repo.add_item(resume)
+        result = await self.repo.add_item(resume)
+        return result
     
+
     async def get_resume(self, user_id: int, resume_id: Optional[int] = None) -> Union[Resume, List[Resume], None]:
         return await self.repo.get_resume_with_relations(user_id, resume_id)
+    
+
+    async def patch_resume(self, user_id: int, resume_id: int, resume_data: ResumeCreate) -> Resume:
+        async with self.repo.session.begin():
+            await self.repo.deactivate_resume(user_id, resume_id)
+            result = await self.create_resume(user_id, resume_data, False)
+        return result
 
 
     async def build_resume_content(self, user_id: int, resume_id: int) -> str:
         resume = await self.repo.get_resume_with_relations(user_id, resume_id)
+
         if not resume:
             raise HTTPException(status_code=404, detail="Resume not found")
 

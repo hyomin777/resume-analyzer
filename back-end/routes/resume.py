@@ -55,6 +55,21 @@ async def get_resumes(
         raise HTTPException(status_code=400, detail=str(e))
     
 
+@resume_router.patch("/resume/{resume_id}", response_model=ResumeOut)
+async def patch_resume(
+    resume_id: int,
+    resume: ResumeCreate,
+    service: ResumeService = Depends(get_resume_service),
+    authorization: str = Header(...)
+):
+    try:
+        user_id = int(get_current_user_id(authorization))
+        result = await service.patch_resume(user_id, resume_id, resume)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
 @resume_router.post("/resume/analysis")
 async def analyze_resume(
     authorization: str = Header(...),
