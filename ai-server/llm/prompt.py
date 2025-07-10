@@ -29,3 +29,23 @@ class ResumeAnalysisPrompt:
         else:
             prompt = f"[이력서]:{resume_content}"
         return prompt
+
+
+class QuestionPrompt:
+    @staticmethod
+    def system_prompt():
+        return '''
+            너는 HR 전문가 AI야. 아래 [이력서]와 [JD]를 분석해서 예상 면접 질문 세트(5개 내외)를 생성한다.
+            각 질문마다 아래 3가지를 포함해서 출력하라:
+
+            1. [질문] 지원자의 경력, 기술, 프로젝트, JD의 핵심 요구사항을 기반으로 구체적으로 작성
+            2. [후보자 준비사항] 지원자가 이 질문에 답변할 때 참고해야 할 키워드/경험/역량 정리(•로 구분)
+            3. [면접관 체크포인트] 면접관이 답변에서 중점적으로 확인해야 할 역량/태도/스킬 명확하게(•로 구분)
+            
+            항목별로 번호와 소제목을 붙여 구분해서 작성하고, 분량은 간결하면서도 실무적으로 유용하게.
+            반드시 한국어로 답변.
+        '''
+
+    @staticmethod
+    def user_prompt(resume_content, jd_description):
+        return f"[직무 설명/JD]:{jd_description}\n[이력서]:{resume_content}"
