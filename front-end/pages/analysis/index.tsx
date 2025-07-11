@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import withAuthProtection from "@/utils/withAuthProtection";
+import ResumeInput from "@/components/ResumeInput";
 import AnalysisReport from "@/components/AnalysisReport";
 
 function Analysis() {
@@ -28,16 +29,6 @@ function Analysis() {
     fetchResumes();
   }, []);
 
-  // PDF 업로드/이력서 선택 동시 방지
-  const handleFileChange = (file: File | null) => {
-    setResume(file);
-    if (file) setSelectedResumeId(null);
-  };
-  const handleResumeSelect = (id: number) => {
-    setSelectedResumeId(id);
-    setResume(null);
-  };
-
   // 분석 요청
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -60,7 +51,7 @@ function Analysis() {
     });
     const data = await res.json();
 
-    setResult(data.result);
+    setResult(data);
     setLoading(false);
     setSaveStatus(null);
   };
@@ -81,7 +72,7 @@ function Analysis() {
       });
 
       const data = await res.json();
-      if (data.result) {
+      if (data) {
         setSaveStatus("success");
       } else {
         setSaveStatus("error");
@@ -95,51 +86,14 @@ function Analysis() {
     <main className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">AI 이력서 역량 분석</h1>
       <form className="space-y-6 mb-8" onSubmit={handleSubmit}>
-        {/* 1. 등록 이력서 선택 */}
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold mb-1">등록된 이력서에서 선택</label>
-          <select
-            className="border p-2 rounded"
-            value={selectedResumeId || ""}
-            onChange={e => handleResumeSelect(Number(e.target.value))}
-            disabled={!!resume}
-          >
-            <option value="">-- 선택 안 함 --</option>
-            {resumeList.map(r => (
-              <option key={r.id} value={r.id}>
-                {r.content?.slice(0, 20) || "이름없음"} ({r.is_pdf ? "PDF" : "작성"})
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* 2. PDF 업로드 */}
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold mb-1">PDF 파일 직접 업로드</label>
-          <input
-            type="file"
-            accept=".pdf"
-            ref={fileInputRef}
-            onChange={e => handleFileChange(e.target.files?.[0] || null)}
-            className="hidden"
-            id="resume-upload"
-            disabled={!!selectedResumeId}
-          />
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className={`bg-indigo-600 text-white px-4 py-2 rounded shadow hover:bg-indigo-700 transition ${selectedResumeId ? "opacity-60 cursor-not-allowed" : ""}`}
-            disabled={!!selectedResumeId}
-          >
-            {resume ? "다시 선택하기" : "PDF 파일 선택"}
-          </button>
-          {resume && (
-            <div className="text-sm text-slate-700 mt-1 flex items-center gap-2">
-              <span className="font-mono">{resume.name}</span>
-              <span className="text-slate-400">({Math.round((resume.size / 1024) * 10) / 10} KB)</span>
-            </div>
-          )}
-        </div>
+        {/* 이력서 선택 or pdf 파일 선택 */}
+        <ResumeInput
+            resumeList={resumeList}
+            selectedResumeId={selectedResumeId}
+            setSelectedResumeId={setSelectedResumeId}
+            resumeFile={resume}
+            setResumeFile={setResume}
+        />
 
         {/* JD 입력 */}
         <div>

@@ -96,7 +96,7 @@ async def analyze_resume(
 
     if file:
         if not file.filename.lower().endswith(".pdf"):
-            return {"error": "Only PDF files are supported."}
+            raise HTTPException(status_code=400, detail="Only PDF files are supported.")
         pdf_bytes = await file.read()
         resume = await service.create_resume_from_pdf(user_id, pdf_bytes)
         content = resume.content
@@ -121,7 +121,7 @@ async def analyze_resume(
             return {"error": "AI server analyze resume failed"}
         result = response.json()
 
-    return {"result": result}
+    return result
 
 
 @resume_router.post("/resume/question")
@@ -136,7 +136,7 @@ async def generate_question(
 
     if file:
         if not file.filename.lower().endswith(".pdf"):
-            return {"error": "Only PDF files are supported."}
+            raise HTTPException(status_code=400, detail="Only PDF files are supported.")
         pdf_bytes = await file.read()
         resume = await service.create_resume_from_pdf(user_id, pdf_bytes)
         content = resume.content
@@ -158,7 +158,7 @@ async def generate_question(
             timeout=120
         )
         if response.status_code != 200:
-            return {"error": "AI server analyze resume failed"}
+            raise HTTPException(status_code=400, detail="AI server analyze resume failed")
         result = response.json()
 
     return result
@@ -175,7 +175,7 @@ async def save_result(
         result=body
     )
     result = await repository.add_item(result)
-    return {"result": result}
+    return result
 
 
 @resume_router.get("/results")
@@ -184,4 +184,4 @@ async def get_results(
     repository: ResultRepository = Depends(get_result_repository)
 ):
     results = await repository.get_all_by_user_id(int(get_current_user_id(authorization)))
-    return {"result": [{"id": r.id, "user_id": r.user_id, "result": r.result} for r in results]}
+    return [{"id": r.id, "user_id": r.user_id, "result": r.result} for r in results]

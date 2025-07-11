@@ -22,7 +22,7 @@ export default function SavedResultsList() {
           setResults([]);
         } else {
           const data = await res.json();
-          setResults(data.result || []);
+          setResults(data || []);
         }
       } catch (e) {
         setError("네트워크 에러");
