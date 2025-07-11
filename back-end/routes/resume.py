@@ -124,6 +124,46 @@ async def analyze_resume(
     return {"result": result}
 
 
+@resume_router.post("/resume/question")
+async def generate_question(
+    authorization: str = Header(...),
+    file: Optional[UploadFile] = File(None),
+    resume_id: Optional[int] = Form(None),
+    jd_description: Optional[str] = Form(...),
+    service: ResumeService = Depends(get_resume_service)
+):
+    user_id = int(get_current_user_id(authorization))
+
+    if file:
+        if not file.filename.lower().endswith(".pdf"):
+            return {"error": "Only PDF files are supported."}
+        pdf_bytes = await file.read()
+        resume = await service.create_resume_from_pdf(user_id, pdf_bytes)
+        content = resume.content
+
+    elif resume_id is not None:
+        content = await service.build_resume_content(user_id, resume_id)
+
+    else:
+        raise HTTPException(status_code=400, detail="You must select a PDF file or resume")
+
+    # Request question generation to AI server
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            url=Config.AI_SERVER_URL + "/api/question",
+            json={
+                "content": content,
+                "jd_description": jd_description
+            },
+            timeout=120
+        )
+        if response.status_code != 200:
+            return {"error": "AI server analyze resume failed"}
+        result = response.json()
+
+    return result
+
+
 @resume_router.post("/result")
 async def save_result(
     authorization: str = Header(...),

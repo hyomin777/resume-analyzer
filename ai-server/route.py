@@ -12,7 +12,7 @@ class ResumeInput(BaseModel):
     resume_content: str
     text: str
 
-@router.post("/api/resume")
+@router.post("/api/resume", response_model=ResumeAnalysis)
 async def analyze_resume(
     content: str = Body(...),
     jd_description: str = Body(default=None)
@@ -22,10 +22,10 @@ async def analyze_resume(
     system_prompt = ResumeAnalysisPrompt.system_prompt()
     user_prompt = ResumeAnalysisPrompt.user_prompt(content, jd_description)
     result = await get_llm_response(system_prompt, user_prompt, ResumeAnalysis)
-    return {"result": result}
+    return result
 
 
-@router.post("/api/interview-questions")
+@router.post("/api/question", response_model=Questions)
 async def generate_interview_questions(
     content: str = Body(...),
     jd_description: str = Body(default=None)
@@ -35,7 +35,7 @@ async def generate_interview_questions(
     system_prompt = QuestionPrompt.system_prompt()
     user_prompt = QuestionPrompt.user_prompt(content, jd_description)
     result = await get_llm_response(system_prompt, user_prompt, Questions)
-    return {"result": result}
+    return result
 
 
 @router.post("/api/feedback")
