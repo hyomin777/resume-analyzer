@@ -2,8 +2,6 @@ import httpx
 from typing import Optional, List
 from fastapi import APIRouter, UploadFile, Depends, Header, File, Form, Body
 from fastapi.exceptions import HTTPException
-from db.models import Result
-from db.repositories import ResultRepository, get_result_repository
 from services import ResumeService, get_resume_service
 from schemas import ResumeCreate, ResumeOut, ResumeWithRelationsOut
 from utils import get_current_user_id
@@ -96,7 +94,7 @@ async def analyze_resume(
 
     if file:
         if not file.filename.lower().endswith(".pdf"):
-            return {"error": "Only PDF files are supported."}
+            raise HTTPException(status_code=400, detail="Only PDF files are supported.")
         pdf_bytes = await file.read()
         resume = await service.create_resume_from_pdf(user_id, pdf_bytes)
         content = resume.content
@@ -121,27 +119,44 @@ async def analyze_resume(
             return {"error": "AI server analyze resume failed"}
         result = response.json()
 
-    return {"result": result}
+    return result
 
 
-@resume_router.post("/result")
-async def save_result(
+@resume_router.post("/resume/question")
+async def generate_question(
     authorization: str = Header(...),
-    body: dict = Body(...),
-    repository: ResultRepository = Depends(get_result_repository),
+    file: Optional[UploadFile] = File(None),
+    resume_id: Optional[int] = Form(None),
+    jd_description: Optional[str] = Form(...),
+    service: ResumeService = Depends(get_resume_service)
 ):
-    result = Result(
-        user_id=int(get_current_user_id(authorization)),
-        result=body
-    )
-    result = await repository.add_item(result)
-    return {"result": result}
+    user_id = int(get_current_user_id(authorization))
 
+    if file:
+        if not file.filename.lower().endswith(".pdf"):
+            raise HTTPException(status_code=400, detail="Only PDF files are supported.")
+        pdf_bytes = await file.read()
+        resume = await service.create_resume_from_pdf(user_id, pdf_bytes)
+        content = resume.content
 
-@resume_router.get("/results")
-async def get_results(
-    authorization: str = Header(...),
-    repository: ResultRepository = Depends(get_result_repository)
-):
-    results = await repository.get_all_by_user_id(int(get_current_user_id(authorization)))
-    return {"result": [{"id": r.id, "user_id": r.user_id, "result": r.result} for r in results]}
+    elif resume_id is not None:
+        content = await service.build_resume_content(user_id, resume_id)
+
+    else:
+        raise HTTPException(status_code=400, detail="You must select a PDF file or resume")
+
+    # Request question generation to AI server
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            url=Config.AI_SERVER_URL + "/api/question",
+            json={
+                "content": content,
+                "jd_description": jd_description
+            },
+            timeout=120
+        )
+        if response.status_code != 200:
+            raise HTTPException(status_code=400, detail="AI server analyze resume failed")
+        result = response.json()
+
+    return result

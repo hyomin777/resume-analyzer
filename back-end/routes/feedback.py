@@ -43,4 +43,4 @@ async def upload_feedback(
         if response.status_code != 200:
             return {"error": "Uploading feedback to AI server failed",}    
 
-    return {"result": feedback}
+    return feedback

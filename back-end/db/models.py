@@ -23,7 +23,6 @@ class Resume(Base):
     is_pdf = Column(Boolean, default=False)
     is_active = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
-    updated_at = Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
 
     education = relationship("Education", cascade="all, delete-orphan", back_populates="resume")
     career = relationship("Career", cascade="all, delete-orphan", back_populates="resume")
@@ -94,9 +93,11 @@ class Feedback(Base):
     created_at = Column(TIMESTAMP(timezone=True), default=lambda: datetime.now(timezone.utc))
 
 
-class Result(Base):
-    __tablename__ = "result"
+class Analysis(Base):
+    __tablename__ = "analysis"
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(ForeignKey("user.id"), index=True)
-    result = Column(JSON)
+    content = Column(JSON)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))

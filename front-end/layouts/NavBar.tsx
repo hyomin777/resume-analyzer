@@ -24,6 +24,9 @@ export default function NavBar() {
         <Link href="/analysis/list">
           <span className="text-green-700 hover:underline cursor-pointer">Analysis List</span>
         </Link>
+        <Link href="/question">
+          <span className="text-green-700 hover:underline cursor-pointer">Qestion generation</span>
+        </Link>
         <Link href="/feedback">
           <span className="text-green-700 hover:underline cursor-pointer">Feedback Upload</span>
         </Link>
