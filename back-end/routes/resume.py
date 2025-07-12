@@ -2,8 +2,6 @@ import httpx
 from typing import Optional, List
 from fastapi import APIRouter, UploadFile, Depends, Header, File, Form, Body
 from fastapi.exceptions import HTTPException
-from db.models import Result
-from db.repositories import ResultRepository, get_result_repository
 from services import ResumeService, get_resume_service
 from schemas import ResumeCreate, ResumeOut, ResumeWithRelationsOut
 from utils import get_current_user_id
@@ -162,26 +160,3 @@ async def generate_question(
         result = response.json()
 
     return result
-
-
-@resume_router.post("/result")
-async def save_result(
-    authorization: str = Header(...),
-    body: dict = Body(...),
-    repository: ResultRepository = Depends(get_result_repository),
-):
-    result = Result(
-        user_id=int(get_current_user_id(authorization)),
-        result=body
-    )
-    result = await repository.add_item(result)
-    return result
-
-
-@resume_router.get("/results")
-async def get_results(
-    authorization: str = Header(...),
-    repository: ResultRepository = Depends(get_result_repository)
-):
-    results = await repository.get_all_by_user_id(int(get_current_user_id(authorization)))
-    return [{"id": r.id, "user_id": r.user_id, "result": r.result} for r in results]

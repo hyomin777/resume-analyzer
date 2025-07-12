@@ -9,6 +9,7 @@ class ResumeService:
     def __init__(self, repo: ResumeRepository):
         self.repo = repo
 
+
     async def create_resume(
             self,
             user_id: int,

@@ -56,19 +56,20 @@ function Analysis() {
     setSaveStatus(null);
   };
 
+  // 분석 결과 저장
   const handleSaveResult = async () => {
     if (!result) return;
     setSaveStatus("loading");
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("/api/result", {
+      const res = await fetch("/api/analysis", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ result }),
+        body: JSON.stringify(result),
       });
 
       const data = await res.json();

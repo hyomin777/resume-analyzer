@@ -31,10 +31,10 @@ class ResumeRepository(Repository[Resume]):
 
 
     async def get_resume(
-            self,
-            user_id: int,
-            resume_id: Optional[int] = None,
-            is_active: bool = True
+        self,
+        user_id: int,
+        resume_id: Optional[int] = None,
+        is_active: bool = True
     ) -> Union[Resume, List[Resume], None]:
         if resume_id is not None:
             stmt = select(Resume).where(
@@ -87,13 +87,10 @@ class ResumeRepository(Repository[Resume]):
 
 
     async def deactivate_resume(self, user_id: int, resume_id: int):
-        stmt = (
-            select(Resume)
-            .where(
-                Resume.id == resume_id,
-                Resume.user_id == user_id,
-                Resume.is_active == True
-            )
+        stmt = select(Resume).where(
+            Resume.id == resume_id,
+            Resume.user_id == user_id,
+            Resume.is_active == True
         )
         result = await self.session.execute(stmt)
         resume = result.scalars().first()
